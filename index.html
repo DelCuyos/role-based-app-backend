@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Full-Stack App (Student Build)</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="not-authenticated">    
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                Full-Stack App (Rodel B. Cuyos)
+            </a>
+            <button class="navbar-toggler" type="button" 
+                data-bs-toggle="collapse" 
+                data-bs-target="#mainNav">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="mainNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item role-logged-out">
+                        <a class="nav-link" href="#/login">Login</a>
+                    </li>
+                    
+                    <li class="nav-item role-logged-out">
+                        <a class="nav-link" href="#/register">Register</a>
+                    </li>
+
+                    <li class="nav-item dropdown role-logged-in">
+                        <a class="nav-link dropdown-toggle" 
+                        href="#" 
+                        id="userDropdown" 
+                        role="button" 
+                        data-bs-toggle="dropdown" 
+                        aria-expanded="false">
+                        Admin
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow">
+                            <li>
+                                <a class="dropdown-item" href="#/profile">Profile</a>
+                            </li>
+                    
+                            <li class="role-admin">     
+                                <a class="dropdown-item" href="#/employees">Employees</a>
+                            </li>
+                    
+                            <li class="role-admin">
+                                <a class="dropdown-item" href="#/accounts">Accounts</a>
+                            </li>
+                    
+                            <li class="role-admin">
+                                <a class="dropdown-item" href="#/departments">Departments</a>
+                            </li>
+                    
+                            <li>
+                                <a class="dropdown-item" href="#/requests">My Requests</a>
+                            </li>
+                    
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                    
+                            <li>
+                                <a class="dropdown-item text-danger" href="#/logout">Logout</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+                       
+            </div>
+        </div>
+    </nav>
+
+    <main class="container py-4">
+        
+        <section id="home-page" class="page active">
+                <div class="p-5 mb-4 bg-light rounded-3 shadow-sm">
+                    <div class="container-fluid py-4">
+                                <h1 class="display-5 fw-bold">Welcome to Full-Stack App</h1>
+                                    <p class="col-md-8 fs-5">
+                                            A static prototype before backend integration. Simulates:
+                                    </p>
+
+                                    <ul>
+                                        <li>Email registration + fake verification</li>
+                                        <li>Login with JWT-like token simulation</li>
+                                        <li>Role-based UI (Admin/User)</li>
+                                        <li>CRUD for Employees, Departments, Requests</li>
+                                    </ul>
+
+                            <div class="alert alert-info mt-3">
+                                        <strong>Note:</strong> All data is stored in 
+                                        <code>localStorage</code>. Refresh to reset.    
+                            </div>
+
+                            <button class="btn btn-primary btn-lg"
+                                onclick="navigateTo('#/login')">
+                            Get Started →
+                            </button>
+                    </div>
+                </div>
+        </section>
+
+        <section id="register-page" class="page">
+            <h2>Register Account</h2>
+            <form id="registerForm" class="mt-3" style="max-width: 400px;">
+                
+                <div class="mb-2"><input type="text" class="form-control" placeholder="First Name" required></div>
+                
+                <div class="mb-2"><input type="text" class="form-control" placeholder="Last Name" required></div>
+                
+                <div class="mb-2"><input type="email" class="form-control" placeholder="Email" required></div>
+                
+                <div class="mb-2"><input type="password" class="form-control" placeholder="Password (min 6 chars)" required></div>
+                
+                <div class="d-flex gap-2">
+                    <button class="btn btn-success">
+                        Sign up
+                    <button type="button" 
+                        class="btn btn-outline-dark"
+                        onclick="navigateTo('#/')">
+                        Cancel
+                    </button>
+                </div>
+                <p id="registerError" class="text-danger mt-2"></p>
+            </form>
+        </section>
+
+        <section id="login-page" class="page">
+            <h2>Login</h2>
+            <form id="loginForm" class="mt-3" style="max-width: 400px;">
+                <div class="mb-2"><input type="email" class="form-control" placeholder="Email" required></div>
+                <div class="mb-2"><input type="password" class="form-control" placeholder="Password" required></div>
+                <button class="btn btn-success">Login</button>
+                <button type="button" 
+                        class="btn btn-outline-dark"
+                        onclick="navigateTo('#/')">
+                        Cancel
+                    </button>
+                <p id="loginError" class="text-danger mt-2"></p>
+            </form>
+        </section>
+
+        <section id="verify-page" class="page">
+            <div class="card shadow-sm text-center">
+                <div class="card-header bg-warning">
+                    Email Verification
+                </div>
+                <div class="card-body">
+                    <p id="verifyMessage"></p>
+                
+                    <button id="verifyBtn" class="btn btn-success">
+                        Verify Email
+                    </button>
+                </div>
+            </div>  
+        </section>
+
+        <section id="profile-page" class="page">
+            <h4 class="mb-3">My Profile</h4>
+
+            <div class="card shadow-sm" style="max-width: 600px;">
+                <div class="card-body">
+
+                    <h5 id="profileFullName" class="fw-bold"></h5>
+
+                    <p class="mb-1">
+                        <strong>Email:</strong>
+                        <span id="profileEmail"></span>
+                    </p>
+
+                    <p class="mb-3">
+                        <strong>Role:</strong>
+                        <span id="profileRole"></span>
+                    </p>
+
+                    <button class="btn btn-outline-primary btn-sm">
+                        Edit Profile
+                    </button>
+
+                </div>
+            </div>
+        </section>
+
+
+        <section id="employees-page" class="page role-admin">
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4>Employees</h4>
+                <button class="btn btn-success btn-sm"
+                        onclick="toggleEmployeeForm(true)">
+                    + Add Employee
+                </button>
+            </div>
+
+            <table class="table table-bordered">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Position</th>
+                        <th>Dept</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="employeesTable">
+                    <tr>
+                        <td colspan="5" class="text-center bg-light">
+                            No employees.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Add/Edit Form -->
+            <div id="employeeFormCard" class="card shadow-sm mt-4 d-none">
+                <div class="card-header">Add/Edit Employee</div>
+                <div class="card-body">
+
+                        <div class="mb-2">
+                            <label>Employee ID</label>
+                            <input type="text" class="form-control" id="empId">
+                        </div>
+
+                        <div class="mb-2">
+                            <label>User Email</label>
+                            <input type="email" class="form-control" id="empEmail">
+                        </div>
+
+                        <div class="mb-2">
+                            <label>Position</label>
+                            <input type="text" class="form-control" id="empPosition">
+                        </div>
+
+                        <div class="mb-2">
+                            <label>Department</label>
+                            <select class="form-select" id="empDept"></select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Hire Date</label>
+                            <input type="date" class="form-control" id="empHireDate">
+                        </div>
+
+                        <button class="btn btn-primary btn-sm"
+                                onclick="saveEmployee()">Save</button>
+
+                        <button class="btn btn-secondary btn-sm"
+                                onclick="toggleEmployeeForm(false)">Cancel</button>
+
+                </div>
+            </div>
+
+        </section>
+
+
+        
+        <section id="accounts-page" class="page role-admin">
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4>Accounts</h4>
+                <button class="btn btn-success btn-sm"
+                        onclick="toggleAccountForm(true)">
+                    + Add Account
+                </button>
+            </div>
+
+            <table class="table table-bordered">
+                <thead class="table-light">
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Verified</th>
+                        <th width="250">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="accountsTable"></tbody>
+            </table>
+
+            <!-- Add/Edit Form -->
+            <div id="accountFormCard" class="card shadow-sm mt-4 d-none">
+                <div class="card-header">Add/Edit Account</div>
+                <div class="card-body">
+
+                    <div class="mb-2">
+                        <label>First Name</label>
+                        <input type="text" class="form-control" id="accFirstName">
+                    </div>
+
+                    <div class="mb-2">
+                        <label>Last Name</label>
+                        <input type="text" class="form-control" id="accLastName">
+                    </div>
+
+                    <div class="mb-2">
+                        <label>Email</label>
+                        <input type="email" class="form-control" id="accEmail">
+                    </div>
+
+                    <div class="mb-2">
+                        <label>Password</label>
+                        <input type="password" class="form-control" id="accPassword">
+                    </div>
+
+                    <div class="mb-2">
+                        <label>Role</label>
+                        <select class="form-select" id="accRole">
+                            <option value="user">User</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="accVerified">
+                        <label class="form-check-label">Verified</label>
+                    </div>
+
+                    <button class="btn btn-primary btn-sm"
+                            onclick="saveAccount()">Save</button>
+
+                    <button class="btn btn-secondary btn-sm"
+                            onclick="toggleAccountForm(false)">Cancel</button>
+
+                </div>
+            </div>
+
+        </section>
+        
+        <section id="departments-page" class="page role-admin">
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4>Departments</h4>
+                <button class="btn btn-success btn-sm"
+                        onclick="toggleDepartmentForm(true)">
+                    + Add Department
+                </button>
+            </div>
+
+            <table class="table table-bordered">
+                <thead class="table-light">
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th width="150">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="departmentsTable"></tbody>
+            </table>
+
+            <!-- Form -->
+            <div id="departmentFormCard" class="card shadow-sm mt-4 d-none">
+                <div class="card-header">Add/Edit Department</div>
+                <div class="card-body">
+
+                    <div class="mb-2">
+                        <label>Name</label>
+                        <input type="text" class="form-control" id="deptName">
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Description</label>
+                        <input type="text" class="form-control" id="deptDesc">
+                    </div>
+
+                    <button class="btn btn-primary btn-sm"
+                            onclick="saveDepartment()">Save</button>
+
+                    <button class="btn btn-secondary btn-sm"
+                            onclick="toggleDepartmentForm(false)">Cancel</button>
+
+                </div>
+            </div>
+
+        </section>
+
+
+        <section id="requests-page" class="page">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white d-flex justify-content-between">
+                    <span>Requests</span>
+                    <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#requestModal">
+                        New Request
+                    </button>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>Requested By</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="requestsTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+            <div class="modal fade" id="requestModal">
+                <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                        <div class="modal-header bg-dark text-white">
+                            <h5>New Request</h5>
+                            <button type="button" class="btn-close btn-close-white"
+                                data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <div class="modal-body">
+
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Quantity</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="requestItems"></tbody>
+                            </table>
+
+                            <button class="btn btn-secondary"
+                                onclick="addRequestRow()">
+                                Add Row
+                            </button>
+
+                        </div>
+
+                        <div class="modal-footer">
+                            <button class="btn btn-success"
+                                onclick="submitRequest()">
+                                Submit Request
+                            </button>
+                        </div>
+
+                        </div>
+                </div>
+            </div>
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="appToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-body"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

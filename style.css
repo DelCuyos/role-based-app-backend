@@ -1,0 +1,39 @@
+body {
+    background-color: #f8f9fa;
+}
+
+h1 {
+    font-weight: 700;
+}
+
+p {
+    font-size: 1.1rem;
+}
+
+.page {
+    display: none;
+    
+}
+
+.page.active {
+    display: block;
+    
+}
+
+/* Authentication states */
+body.not-authenticated .role-logged-in {
+    display: none ;
+}
+
+body.authenticated .role-logged-out {
+    display: none ;
+}
+
+/* Admin role */
+.role-admin {
+    display: none ;
+}
+
+body.is-admin .role-admin {
+    display: block ;
+}
